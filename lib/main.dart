@@ -13,9 +13,11 @@ import 'package:chat_room/pages/profileCreate.dart';
 import 'package:chat_room/pages/profileUserShow.dart';
 import 'package:chat_room/pages/searchGroupsScreen.dart';
 
+import 'firebase_options.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await ThemeDataService.setUpAppThemes();
   runApp(const MyApp());
 }
