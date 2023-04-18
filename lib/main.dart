@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:chat_room/pages/chatScreen.dart';
 import 'package:chat_room/pages/loginScreen.dart';
 import 'package:chat_room/pages/registrationScreen.dart';
-import 'package:chat_room/pages/welcomeScreen.dart';
+import 'package:chat_room/pages/welcome_screen.dart';
 import 'package:chat_room/pages/profileCreate.dart';
 import 'package:chat_room/pages/profileUserShow.dart';
 import 'package:chat_room/pages/searchGroupsScreen.dart';
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       initialRoute: SplashScreen.id,
       routes: {
         SplashScreen.id: (context) => const SplashScreen(),
-        welcomeScreen.id: (context) => welcomeScreen(),
+        WelcomeScreen.id: (context) => const WelcomeScreen(),
         loginScreen.id: (context) => loginScreen(),
         regScreen.id: (context) => const regScreen(),
         profileCreate.id: (context) => const profileCreate(),

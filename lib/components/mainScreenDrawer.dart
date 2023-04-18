@@ -1,6 +1,6 @@
 import 'package:chat_room/pages/profileUserShow.dart';
 import 'package:chat_room/pages/settingsScreen.dart';
-import 'package:chat_room/pages/welcomeScreen.dart';
+import 'package:chat_room/pages/welcome_screen.dart';
 import 'package:chat_room/services/themeDataService.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -91,7 +91,7 @@ class _MainScreenDrawerState extends State<MainScreenDrawer> {
 
   userLogOut() {
     _auth.signOut();
-    Navigator.popAndPushNamed(context, welcomeScreen.id);
+    Navigator.popAndPushNamed(context, WelcomeScreen.id);
   }
 
   @override

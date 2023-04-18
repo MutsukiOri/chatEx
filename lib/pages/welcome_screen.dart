@@ -4,20 +4,19 @@ import 'package:chat_room/services/themeDataService.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_room/pages/loginScreen.dart';
 import 'package:chat_room/pages/registrationScreen.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import '../components/roundedBtnT1.dart';
 
-class welcomeScreen extends StatefulWidget {
+class WelcomeScreen extends StatefulWidget {
   static String id = 'welcome_screen';
-  welcomeScreen({Key? key}) : super(key: key);
+  const WelcomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<welcomeScreen> createState() => _welcomeScreenState();
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
 
-class _welcomeScreenState extends State<welcomeScreen> {
+class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

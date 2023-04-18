@@ -2,7 +2,7 @@
 
 import 'package:chat_room/pages/searchGroupsScreen.dart';
 import 'package:chat_room/pages/splashScreen.dart';
-import 'package:chat_room/pages/welcomeScreen.dart';
+import 'package:chat_room/pages/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -79,7 +79,7 @@ class _MainScreenState extends State<MainScreen> {
 
   userLogOut() {
     _auth.signOut();
-    Navigator.popAndPushNamed(context, welcomeScreen.id);
+    Navigator.popAndPushNamed(context, WelcomeScreen.id);
   }
 
   groupList() {

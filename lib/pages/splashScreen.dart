@@ -1,7 +1,7 @@
 import 'package:chat_room/consts.dart';
-import 'package:chat_room/pages/welcomeScreen.dart';
+import 'package:chat_room/pages/welcome_screen.dart';
 import 'package:chat_room/services/themeDataService.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -18,7 +18,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   bool isLoggedIn = false;
-  final _fireStore = FirebaseFirestore.instance;
+  // final _fireStore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
   bool isUserOffline = false;
   @override
@@ -40,10 +40,10 @@ class _SplashScreenState extends State<SplashScreen> {
               AuthService.pushMainScreenRoutine(context);
             } else {
               _auth.signOut();
-              Navigator.popAndPushNamed(context, welcomeScreen.id);
+              Navigator.popAndPushNamed(context, WelcomeScreen.id);
             }
           } else {
-            Navigator.popAndPushNamed(context, welcomeScreen.id);
+            Navigator.popAndPushNamed(context, WelcomeScreen.id);
           }
         });
       } else {
