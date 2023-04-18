@@ -172,8 +172,7 @@ class _loginScreenState extends State<loginScreen> {
                                   await AuthService.checkIfUserDocExists();
                               bool isVerified = user.emailVerified;
                               if (isVerified && docExists) {
-                               AuthService.pushMainScreenRoutine(
-                                    context);
+                                AuthService.pushMainScreenRoutine(context);
                               } else if (!isVerified) {
                                 setState(() {
                                   showLoader = false;
@@ -206,7 +205,8 @@ class _loginScreenState extends State<loginScreen> {
                                 setState(() {
                                   showLoader = true;
                                 });
-                                await AuthService.pushMainScreenRoutine(context);
+                                await AuthService.pushMainScreenRoutine(
+                                    context);
                                 setState(() {
                                   showLoader = false;
                                 });

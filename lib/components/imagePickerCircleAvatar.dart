@@ -14,7 +14,6 @@ class ImagePickerCircleAvatar extends StatefulWidget {
 }
 
 class _ImagePickerCircleAvatar extends State<ImagePickerCircleAvatar> {
-
   void pickUploadImage() async {
     final imgPath = await ImagePicker()
         .pickImage(source: ImageSource.gallery, imageQuality: 80);

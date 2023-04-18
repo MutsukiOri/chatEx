@@ -34,13 +34,11 @@ InputDecoration kMsgInputContainerDecoration = InputDecoration(
   hintStyle:
       GoogleFonts.poppins(color: Colors.white70, fontWeight: FontWeight.w400),
   border: OutlineInputBorder(
-    borderRadius: const BorderRadius.all(Radius.circular(8)),
-    borderSide: BorderSide(color: HexColor("111111"), width: 0)
-  ),
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      borderSide: BorderSide(color: HexColor("111111"), width: 0)),
   enabledBorder: OutlineInputBorder(
-    borderRadius: const BorderRadius.all(Radius.circular(8)),
-    borderSide: BorderSide(color: HexColor("111111"), width: 0)
-  ),
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      borderSide: BorderSide(color: HexColor("111111"), width: 0)),
   focusedBorder: OutlineInputBorder(
     borderRadius: const BorderRadius.all(Radius.circular(8)),
     borderSide: BorderSide(color: HexColor("111111"), width: 0),
@@ -65,9 +63,9 @@ InputDecoration kSearchGroupInputDecoration = InputDecoration(
 );
 
 void showSnackBar(BuildContext buildContext, String txt, int duration,
-    {Color? bgColor,String? hexCode}) {
+    {Color? bgColor, String? hexCode}) {
   Color bgNormalColor = Colors.red;
-  if(bgColor != null){
+  if (bgColor != null) {
     bgNormalColor = bgColor;
   }
   ScaffoldMessenger.of(buildContext).showSnackBar(SnackBar(
@@ -82,11 +80,10 @@ void showSnackBar(BuildContext buildContext, String txt, int duration,
         maxLines: 7,
       ),
     ),
-    backgroundColor: hexCode != null ? HexColor(hexCode):bgNormalColor,
+    backgroundColor: hexCode != null ? HexColor(hexCode) : bgNormalColor,
     shape: const OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-      borderSide: BorderSide(color: Colors.transparent)
-    ),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderSide: BorderSide(color: Colors.transparent)),
     duration: Duration(milliseconds: duration),
   ));
 }
@@ -165,33 +162,39 @@ class HelperFunctions {
       return false;
     }
   }
-  static Future<bool> checkIfLocalDirExistsInApp(String path)async{
+
+  static Future<bool> checkIfLocalDirExistsInApp(String path) async {
     final appDocDir = await getApplicationDocumentsDirectory();
     Directory fileDir = Directory('${appDocDir.path}/$path/');
     final doesDirExist = await fileDir.exists();
     return doesDirExist;
   }
-  static Future createLocalDirInApp(String path)async{
+
+  static Future createLocalDirInApp(String path) async {
     final appDocDir = await getApplicationDocumentsDirectory();
     Directory fileDir = Directory('${appDocDir.path}/$path/');
     await fileDir.create(recursive: true);
   }
-  static Future<bool> checkIfLocalDirExistsInStorage(String path)async{
+
+  static Future<bool> checkIfLocalDirExistsInStorage(String path) async {
     final appDocDir = await getExternalStorageDirectory();
     Directory fileDir = Directory('${appDocDir?.path}/$path');
     final doesDirExist = await fileDir.exists();
     return doesDirExist;
   }
-  static Future createLocalDirInStorage(String path)async{
+
+  static Future createLocalDirInStorage(String path) async {
     final appDocDir = await getExternalStorageDirectory();
     Directory fileDir = Directory('${appDocDir?.path}/$path');
     await fileDir.create(recursive: true);
   }
-  static void clearImageCache(){
+
+  static void clearImageCache() {
     imageCache.clear();
     imageCache.clearLiveImages();
   }
-  static void scrollDown(){
+
+  static void scrollDown() {
     final ScrollController controller = ScrollController();
     //animate scroll
     controller.animateTo(
@@ -202,19 +205,28 @@ class HelperFunctions {
     //no animate scroll
     controller.jumpTo(controller.position.maxScrollExtent);
   }
+
   static popOutOfContext(BuildContext context) {
     Navigator.of(context).pop();
   }
-  static popOfPage(BuildContext context){
+
+  static popOfPage(BuildContext context) {
     final nav = Navigator.of(context);
     nav.pop();
     nav.pop();
   }
-  static Widget tradeMark(){
+
+  static Widget tradeMark() {
     return Column(
       children: [
-        Text("By\nGPSxtreme",style: GoogleFonts.mansalva(color: Colors.white54),textAlign: TextAlign.center,),
-        const SizedBox(height: 10,)
+        Text(
+          "By\nGPSxtreme",
+          style: GoogleFonts.mansalva(color: Colors.white54),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(
+          height: 10,
+        )
       ],
     );
   }

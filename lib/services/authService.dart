@@ -44,12 +44,14 @@ class AuthService {
   }
 
   static Future<void> pushMainScreenRoutine(BuildContext context) async {
-    try{
+    try {
       final _auth = FirebaseAuth.instance;
       final _fireStore = FirebaseFirestore.instance;
       final loggedUser = _auth.currentUser;
-      final userDetails =
-      await _fireStore.collection("users").doc(_auth.currentUser?.uid).get();
+      final userDetails = await _fireStore
+          .collection("users")
+          .doc(_auth.currentUser?.uid)
+          .get();
       Navigator.popAndPushNamed(context, MainScreen.id, arguments: {
         "img": userDetails["profileImgLink"],
         "name": userDetails["userName"],
@@ -57,7 +59,7 @@ class AuthService {
         "phNo": userDetails["phoneNumber"],
         "uid": loggedUser?.uid
       });
-    }catch(e){
+    } catch (e) {
       print("push main screen routine error: $e");
     }
   }
@@ -96,32 +98,46 @@ class AuthService {
     final user = _auth.currentUser;
     await user!.sendEmailVerification();
   }
-  static Future changeUserPassword()async{
+
+  static Future changeUserPassword() async {
     final _auth = FirebaseAuth.instance;
     final _fireStore = FirebaseFirestore.instance;
-    final userDetails = await _fireStore.collection("users").doc(_auth.currentUser?.uid).get();
+    final userDetails =
+        await _fireStore.collection("users").doc(_auth.currentUser?.uid).get();
     final userEmail = userDetails["email"];
     await _auth.sendPasswordResetEmail(email: userEmail);
   }
-  static Future changeUserEmail(BuildContext context , String email)async{
+
+  static Future changeUserEmail(BuildContext context, String email) async {
     final _auth = FirebaseAuth.instance;
     final _fireStore = FirebaseFirestore.instance;
     final user = _auth.currentUser;
-    final userDetails = await _fireStore.collection("users").doc(_auth.currentUser?.uid).get();
-    if(email != userDetails["email"]){
-      try{
+    final userDetails =
+        await _fireStore.collection("users").doc(_auth.currentUser?.uid).get();
+    if (email != userDetails["email"]) {
+      try {
         await user?.updateEmail(email);
         await user?.reload();
         await user?.sendEmailVerification();
-        await _fireStore.collection("users").doc(_auth.currentUser?.uid).update({
-          "email":email
-        });
-        showSnackBar(context, "Your login email has been changed to $email.Please verify your new email to login.\nPlease check spam folder of your email.", 3800,bgColor: MainScreenTheme.mainScreenBg == Colors.black ? HexColor("222222"):Colors.indigo);
-      }on FirebaseAuthException catch(e){
+        await _fireStore
+            .collection("users")
+            .doc(_auth.currentUser?.uid)
+            .update({"email": email});
+        showSnackBar(
+            context,
+            "Your login email has been changed to $email.Please verify your new email to login.\nPlease check spam folder of your email.",
+            3800,
+            bgColor: MainScreenTheme.mainScreenBg == Colors.black
+                ? HexColor("222222")
+                : Colors.indigo);
+      } on FirebaseAuthException catch (e) {
         showSnackBar(context, e.message.toString(), 3000);
       }
-    }else{
-      showSnackBar(context, "No changes made.", 1400,bgColor: MainScreenTheme.mainScreenBg == Colors.black ? HexColor("222222"):Colors.indigo);
+    } else {
+      showSnackBar(context, "No changes made.", 1400,
+          bgColor: MainScreenTheme.mainScreenBg == Colors.black
+              ? HexColor("222222")
+              : Colors.indigo);
     }
   }
 }

@@ -25,40 +25,46 @@ class _GroupTileState extends State<GroupTile> {
     super.initState();
     startRoutine();
   }
-  startRoutine()async{
+
+  startRoutine() async {
     await getGroupDetails();
     await checkLocalGroupIcon();
   }
+
   Future getGroupDetails() async {
     final _fireStore = FirebaseFirestore.instance;
-    final groupDetails = await _fireStore.collection("groups").doc(widget.groupId).get();
-    if(groupDetails.exists){
+    final groupDetails =
+        await _fireStore.collection("groups").doc(widget.groupId).get();
+    if (groupDetails.exists) {
       name = groupDetails["name"];
-    }else{
+    } else {
       super.dispose();
     }
   }
-  Future checkLocalGroupIcon()async{
-    bool isDirExist = await HelperFunctions.checkIfLocalDirExistsInStorage("groupProfilePictures");
-    if(!isDirExist){
-     await HelperFunctions.createLocalDirInStorage("groupProfilePictures");
+
+  Future checkLocalGroupIcon() async {
+    bool isDirExist = await HelperFunctions.checkIfLocalDirExistsInStorage(
+        "groupProfilePictures");
+    if (!isDirExist) {
+      await HelperFunctions.createLocalDirInStorage("groupProfilePictures");
     }
     final appDocDir = await getExternalStorageDirectory();
     String imgName = "${widget.groupId}_$name.jpg";
     String filePath = "${appDocDir?.path}/groupProfilePictures/$imgName";
     final file = File(filePath);
     bool doesFileExist = await file.exists();
-    if(!doesFileExist){
-      String result = await CloudStorageService.downloadLocalImg(imgName,filePath,"groupProfilePictures");
-      if(result != "error"){
-        if(mounted){
+    if (!doesFileExist) {
+      String result = await CloudStorageService.downloadLocalImg(
+          imgName, filePath, "groupProfilePictures");
+      if (result != "error") {
+        if (mounted) {
           setState(() {
             groupImgPath = result;
           });
         }
       }
-    }else{
-      if(mounted){
+    } else {
+      if (mounted) {
         setState(() {
           groupImgPath = filePath;
         });
@@ -69,69 +75,70 @@ class _GroupTileState extends State<GroupTile> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: _fireStore.collection("groups").doc(widget.groupId).snapshots(),
-        builder: (context,AsyncSnapshot snapshot){
-          ImageProvider<Object>? logo(){
-          if(groupImgPath != ""){
-            return  FileImage(File(groupImgPath));
-          }else if (snapshot.data["groupIcon"] != ""){
-            return NetworkImage(snapshot.data["groupIcon"]);
+        stream: _fireStore.collection("groups").doc(widget.groupId).snapshots(),
+        builder: (context, AsyncSnapshot snapshot) {
+          ImageProvider<Object>? logo() {
+            if (groupImgPath != "") {
+              return FileImage(File(groupImgPath));
+            } else if (snapshot.data["groupIcon"] != "") {
+              return NetworkImage(snapshot.data["groupIcon"]);
+            }
+            return null;
           }
-          return null;
-        }
-        if(snapshot.hasData){
-          String groupName = "";
-          try{
+
+          if (snapshot.hasData) {
+            String groupName = "";
+            try {
               groupName = snapshot.data["newName"];
-          }catch(e){
-            groupName = snapshot.data["name"];
-          }
-          return Container(
-              color: Colors.transparent,
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, chatScreen.id, arguments: {
-                    "groupId": widget.groupId,
-                    "groupName": groupName,
-                    "createdBy": snapshot.data["createdBy"],
-                    "groupImgPath":groupImgPath
-                  });
-                },
-                child: ListTile(
-                  visualDensity: const VisualDensity(horizontal: 0, vertical: -1),
-                  leading: (groupImgPath != "" && snapshot.data["groupIcon"] != "")
-                      ? CircleAvatar(
-                      radius: 25,
-                      backgroundColor: Colors.white,
-                      backgroundImage: logo()
-                  )
-                      : const CircleAvatar(
-                    radius: 35,
-                    backgroundColor: Colors.white,
-                    child: CircularProgressIndicator(
-                      color: Colors.blue,
-                      strokeWidth: 16,
+            } catch (e) {
+              groupName = snapshot.data["name"];
+            }
+            return Container(
+                color: Colors.transparent,
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, chatScreen.id, arguments: {
+                      "groupId": widget.groupId,
+                      "groupName": groupName,
+                      "createdBy": snapshot.data["createdBy"],
+                      "groupImgPath": groupImgPath
+                    });
+                  },
+                  child: ListTile(
+                    visualDensity:
+                        const VisualDensity(horizontal: 0, vertical: -1),
+                    leading:
+                        (groupImgPath != "" && snapshot.data["groupIcon"] != "")
+                            ? CircleAvatar(
+                                radius: 25,
+                                backgroundColor: Colors.white,
+                                backgroundImage: logo())
+                            : const CircleAvatar(
+                                radius: 35,
+                                backgroundColor: Colors.white,
+                                child: CircularProgressIndicator(
+                                  color: Colors.blue,
+                                  strokeWidth: 16,
+                                ),
+                              ),
+                    title: Text(
+                      groupName,
+                      style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      "Created by: ${snapshot.data["createdBy"]}",
+                      style: GoogleFonts.poppins(
+                          color: Colors.white, fontSize: 11),
                     ),
                   ),
-                  title: Text(
-                    groupName,
-                    style: GoogleFonts.poppins(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(
-                    "Created by: ${snapshot.data["createdBy"]}",
-                    style: GoogleFonts.poppins(color: Colors.white, fontSize: 11),
-                  ),
-                ),
-              )
-          );
-        }else{
-          return Container();
-        }
-      }
-    );
+                ));
+          } else {
+            return Container();
+          }
+        });
   }
 }

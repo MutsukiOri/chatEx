@@ -37,8 +37,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-    });
+    setState(() {});
     themeData.addListener(themeListener);
     getCurrentUser();
   }
@@ -88,7 +87,10 @@ class _MainScreenState extends State<MainScreen> {
       children: [
         Expanded(
           child: StreamBuilder(
-              stream: _fireStore.collection("users").doc(loggedUser.uid).snapshots(),
+              stream: _fireStore
+                  .collection("users")
+                  .doc(loggedUser.uid)
+                  .snapshots(),
               builder: (context, AsyncSnapshot snapshot) {
                 if (snapshot.hasData) {
                   if (snapshot.data['joinedGroups'] != null &&
@@ -112,8 +114,7 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                   );
                 }
-              }
-              ),
+              }),
         ),
         HelperFunctions.tradeMark()
       ],
@@ -147,10 +148,10 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
-  Future<void> onRefresh()async{
+
+  Future<void> onRefresh() async {
     AuthService.pushMainScreenRoutine(context);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -192,13 +193,10 @@ class _MainScreenState extends State<MainScreen> {
           onRefresh: onRefresh,
           color: MainScreenTheme.mainScreenBg,
           child: Stack(
-            children: [
-              groupList()
-            ],
+            children: [groupList()],
           ),
         ),
       ),
     );
   }
 }
-

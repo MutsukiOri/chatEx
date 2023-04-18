@@ -37,8 +37,7 @@ class _MainScreenDrawerState extends State<MainScreenDrawer> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-    });
+    setState(() {});
     themeData.addListener(themeListener);
     checkLocalProfilePicture();
   }
@@ -48,9 +47,11 @@ class _MainScreenDrawerState extends State<MainScreenDrawer> {
     super.dispose();
     themeData.removeListener(themeListener);
   }
-  Future checkLocalProfilePicture()async{
-    bool isDirExist = await HelperFunctions.checkIfLocalDirExistsInStorage("userData");
-    if(!isDirExist){
+
+  Future checkLocalProfilePicture() async {
+    bool isDirExist =
+        await HelperFunctions.checkIfLocalDirExistsInStorage("userData");
+    if (!isDirExist) {
       await HelperFunctions.createLocalDirInStorage("userData");
     }
     final appDocDir = await getExternalStorageDirectory();
@@ -59,17 +60,18 @@ class _MainScreenDrawerState extends State<MainScreenDrawer> {
     String filePath = "${appDocDir?.path}/userData/$imgName";
     final file = File(filePath);
     bool doesFileExist = await file.exists();
-    if(!doesFileExist){
-      String result = await CloudStorageService.downloadLocalImg(cloudImgName,filePath,"userProfilePictures");
-      if(result != "error"){
-        if(mounted){
+    if (!doesFileExist) {
+      String result = await CloudStorageService.downloadLocalImg(
+          cloudImgName, filePath, "userProfilePictures");
+      if (result != "error") {
+        if (mounted) {
           setState(() {
             userProfilePicturePath = result;
           });
         }
       }
-    }else{
-      if(mounted){
+    } else {
+      if (mounted) {
         setState(() {
           userProfilePicturePath = filePath;
         });
@@ -97,7 +99,9 @@ class _MainScreenDrawerState extends State<MainScreenDrawer> {
     return Drawer(
         elevation: 10,
         width: MediaQuery.of(context).size.width * 0.8,
-        backgroundColor: MainScreenTheme.mainScreenBg == Colors.black ? HexColor("111111"):MainScreenTheme.mainScreenBg,
+        backgroundColor: MainScreenTheme.mainScreenBg == Colors.black
+            ? HexColor("111111")
+            : MainScreenTheme.mainScreenBg,
         child: Padding(
           padding: const EdgeInsets.only(top: 50.0),
           child: Column(
@@ -111,32 +115,35 @@ class _MainScreenDrawerState extends State<MainScreenDrawer> {
                   if (snapshot.hasData) {
                     String userName = snapshot.data["userName"];
                     String userDpUrl = snapshot.data["profileImgLink"];
-                    ImageProvider<Object>? dp(){
-                      if(userProfilePicturePath != ""){
-                        return  FileImage(File(userProfilePicturePath));
-                      }else if (snapshot.data["profileImgLink"] != ""){
+                    ImageProvider<Object>? dp() {
+                      if (userProfilePicturePath != "") {
+                        return FileImage(File(userProfilePicturePath));
+                      } else if (snapshot.data["profileImgLink"] != "") {
                         return NetworkImage(snapshot.data["profileImgLink"]);
                       }
                       return null;
                     }
+
                     return SingleChildScrollView(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 20),
                         child: Row(
                           children: [
-                        (userProfilePicturePath != "" && snapshot.data["profileImgLink"] != "")?
-                            CircleAvatar(
-                              radius: 35,
-                              backgroundColor: Colors.white,
-                              backgroundImage: dp(),
-                            ): const CircleAvatar(
-                              radius: 35,
-                              backgroundColor: Colors.white,
-                              child: CircularProgressIndicator(
-                                color: Colors.blue,
-                                strokeWidth: 8,
-                        ),
-                      ),
+                            (userProfilePicturePath != "" &&
+                                    snapshot.data["profileImgLink"] != "")
+                                ? CircleAvatar(
+                                    radius: 35,
+                                    backgroundColor: Colors.white,
+                                    backgroundImage: dp(),
+                                  )
+                                : const CircleAvatar(
+                                    radius: 35,
+                                    backgroundColor: Colors.white,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.blue,
+                                      strokeWidth: 8,
+                                    ),
+                                  ),
                             const SizedBox(
                               width: 10,
                             ),
@@ -174,12 +181,16 @@ class _MainScreenDrawerState extends State<MainScreenDrawer> {
                                           arguments: {
                                             "senderUid": widget.userUid,
                                             "isMe": true,
-                                            "userProfilePicturePath":userProfilePicturePath,
+                                            "userProfilePicturePath":
+                                                userProfilePicturePath,
                                           });
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: MainScreenTheme.mainScreenBg == Colors.black ? Colors.black:Colors.black26,
+                                        color: MainScreenTheme.mainScreenBg ==
+                                                Colors.black
+                                            ? Colors.black
+                                            : Colors.black26,
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Padding(

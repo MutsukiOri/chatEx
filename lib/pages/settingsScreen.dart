@@ -27,8 +27,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-    });
+    setState(() {});
     themeData.addListener(themeListener);
     userEmailFetched = _auth.currentUser?.email ?? "";
   }
@@ -53,215 +52,256 @@ class _SettingsScreenState extends State<SettingsScreen> {
         elevation: 0,
         title: Text(
           "Settings",
-          style: GoogleFonts.poppins(color: SettingsScreenTheme.settingsScreenAppBarTitle),
+          style: GoogleFonts.poppins(
+              color: SettingsScreenTheme.settingsScreenAppBarTitle),
         ),
         backgroundColor: SettingsScreenTheme.settingsScreenAppBarBg,
       ),
       body: Column(
-          children: [
-            Expanded(
-              child: ScrollConfiguration(
-                behavior: const ScrollBehavior(),
-                child: GlowingOverscrollIndicator(
-                  axisDirection: AxisDirection.down,
-                  color: MainScreenTheme.mainScreenBg,
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: [
-                      Column(
-                        children: [
-                          const SizedBox(height: 10,),
-                          Center(
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.95,
-                              decoration: BoxDecoration(
-                                color: Colors.white12,
-                                borderRadius: BorderRadius.circular(18),
-                              ),
-                              child: Padding(
-                                padding:
-                                const EdgeInsets.symmetric(horizontal: 5, vertical: 25),
-                                child: Column(children: [
-                                  Text(
-                                    "App Theme",
-                                    style: GoogleFonts.poppins(
-                                        color: SettingsScreenTheme.settingsScreenText,
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w600),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  const Divider(
-                                    color: Colors.white12,
-                                    indent: 20,
-                                    endIndent: 20,
-                                    height: 2,
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: const [
-                                      ThemeTile(
-                                        tileColorHexCode: "501b23",
-                                      ),
-                                      ThemeTile(
-                                        tileColorHexCode: "961e7c",
-                                      ),
-                                      ThemeTile(
-                                        tileColorHexCode: "4B0082",
-                                      ),
-                                      ThemeTile(
-                                        tileColorHexCode: "3c341f",
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: const [
-                                      ThemeTile(
-                                        tileColorHexCode: "939c35",
-                                      ),
-                                      ThemeTile(
-                                        tileColorHexCode: "359c8b",
-                                      ),
-                                      ThemeTile(
-                                        tileColorHexCode: "9090f5",
-                                      ),
-                                      ThemeTile(
-                                        tileColorHexCode: "66b374",
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      ElevatedButton(
-                                        onPressed: () async{
-                                          await LocalDataService.setUserTheme(SettingsScreen.selectedThemeColor);
-                                          await ThemeDataService.setAppTheme(SettingsScreen.selectedThemeColor);
-                                          await AuthService.pushMainScreenRoutine(context);
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: MainScreenTheme.mainScreenBg,
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                        ),
-                                        child:Text(
-                                          "Apply",
-                                          style: GoogleFonts.poppins(
-                                              fontSize: 15,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 15,),
-                                      ElevatedButton(
-                                        onPressed: () async{
-                                          await LocalDataService.setUserTheme("");
-                                          SettingsScreen.isAThemeTileActive = false;
-                                          await ThemeDataService.resetToDark();
-                                          await AuthService.pushMainScreenRoutine(context);
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: MainScreenTheme.mainScreenBg,
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                        ),
-                                        child:Text(
-                                          "Reset",
-                                          style: GoogleFonts.poppins(
-                                              fontSize: 15,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ]),
-                              ),
+        children: [
+          Expanded(
+            child: ScrollConfiguration(
+              behavior: const ScrollBehavior(),
+              child: GlowingOverscrollIndicator(
+                axisDirection: AxisDirection.down,
+                color: MainScreenTheme.mainScreenBg,
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Center(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.95,
+                            decoration: BoxDecoration(
+                              color: Colors.white12,
+                              borderRadius: BorderRadius.circular(18),
                             ),
-                          ),
-                          const SizedBox(height: 10,),
-                          ListTile(
-                            leading: const Icon(Icons.password,color: Colors.white,size: 30,),
-                            title: Text("Change password",style: GoogleFonts.poppins(color: Colors.white),),
-                            onTap: ()async{
-                              await AuthService.changeUserPassword();
-                              showSnackBar(context, "Password reset email sent to $userEmailFetched\nPlease check spam folder of your email.", 3800,bgColor: MainScreenTheme.mainScreenBg == Colors.black ? HexColor("222222"):Colors.indigo );
-                            },
-                          ),
-                          ListTile(
-                            leading: const Icon(Icons.email,color: Colors.white,size: 30,),
-                            title: Text("Change email",style: GoogleFonts.poppins(color: Colors.white),),
-                            onTap: ()async{
-                              if(!isInEmailEditMode){
-                                setState(() {
-                                  isInEmailEditMode = true;
-                                });
-                              }else{
-                                setState(() {
-                                  isInEmailEditMode = false;
-                                });
-                              }
-                            },
-                          ),
-                          if(isInEmailEditMode) ...[
-                            Padding(
+                            child: Padding(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 7),
-                              child: TextFormField(
-                                cursorColor: Colors.white,
-                                initialValue: userEmailFetched,
-                                // controller: userNameController,
-                                style: GoogleFonts.poppins(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w400,
+                                  horizontal: 5, vertical: 25),
+                              child: Column(children: [
+                                Text(
+                                  "App Theme",
+                                  style: GoogleFonts.poppins(
+                                      color: SettingsScreenTheme
+                                          .settingsScreenText,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w600),
+                                  textAlign: TextAlign.left,
                                 ),
-                                textAlign: TextAlign.center,
-                                keyboardType:
-                                TextInputType.emailAddress,
-                                onChanged: (value) {
-                                  newUserEmail = value;
-                                },
-                                decoration:
-                                kMsgInputContainerDecoration.copyWith(
-                                    border: null,
-                                    enabledBorder: null,
-                                    focusedBorder: null,
-                                    fillColor: Colors.white12,
-                                    prefixIcon: const Icon(
-                                      Icons.edit,
-                                      color: Colors.white,
-                                      size: 30,
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                const Divider(
+                                  color: Colors.white12,
+                                  indent: 20,
+                                  endIndent: 20,
+                                  height: 2,
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: const [
+                                    ThemeTile(
+                                      tileColorHexCode: "501b23",
                                     ),
-                                    suffixIcon: IconButton(onPressed: ()async{
-                                      if(newUserEmail.isEmpty){
-                                        newUserEmail = userEmailFetched;
-                                      }
-                                      userEmailFetched = newUserEmail;
-                                      await AuthService.changeUserEmail(context, userEmailFetched);
-                                    }, icon: const Icon(Icons.check,color: Colors.white,size: 30,))
+                                    ThemeTile(
+                                      tileColorHexCode: "961e7c",
+                                    ),
+                                    ThemeTile(
+                                      tileColorHexCode: "4B0082",
+                                    ),
+                                    ThemeTile(
+                                      tileColorHexCode: "3c341f",
+                                    ),
+                                  ],
                                 ),
-                              ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: const [
+                                    ThemeTile(
+                                      tileColorHexCode: "939c35",
+                                    ),
+                                    ThemeTile(
+                                      tileColorHexCode: "359c8b",
+                                    ),
+                                    ThemeTile(
+                                      tileColorHexCode: "9090f5",
+                                    ),
+                                    ThemeTile(
+                                      tileColorHexCode: "66b374",
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        await LocalDataService.setUserTheme(
+                                            SettingsScreen.selectedThemeColor);
+                                        await ThemeDataService.setAppTheme(
+                                            SettingsScreen.selectedThemeColor);
+                                        await AuthService.pushMainScreenRoutine(
+                                            context);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            MainScreenTheme.mainScreenBg,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 8),
+                                      ),
+                                      child: Text(
+                                        "Apply",
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 15, color: Colors.white),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 15,
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        await LocalDataService.setUserTheme("");
+                                        SettingsScreen.isAThemeTileActive =
+                                            false;
+                                        await ThemeDataService.resetToDark();
+                                        await AuthService.pushMainScreenRoutine(
+                                            context);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            MainScreenTheme.mainScreenBg,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 8),
+                                      ),
+                                      child: Text(
+                                        "Reset",
+                                        style: GoogleFonts.poppins(
+                                            fontSize: 15, color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ]),
                             ),
-                          ]
-                        ],
-                      ),
-                    ],
-                  ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        ListTile(
+                          leading: const Icon(
+                            Icons.password,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                          title: Text(
+                            "Change password",
+                            style: GoogleFonts.poppins(color: Colors.white),
+                          ),
+                          onTap: () async {
+                            await AuthService.changeUserPassword();
+                            showSnackBar(
+                                context,
+                                "Password reset email sent to $userEmailFetched\nPlease check spam folder of your email.",
+                                3800,
+                                bgColor:
+                                    MainScreenTheme.mainScreenBg == Colors.black
+                                        ? HexColor("222222")
+                                        : Colors.indigo);
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(
+                            Icons.email,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                          title: Text(
+                            "Change email",
+                            style: GoogleFonts.poppins(color: Colors.white),
+                          ),
+                          onTap: () async {
+                            if (!isInEmailEditMode) {
+                              setState(() {
+                                isInEmailEditMode = true;
+                              });
+                            } else {
+                              setState(() {
+                                isInEmailEditMode = false;
+                              });
+                            }
+                          },
+                        ),
+                        if (isInEmailEditMode) ...[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 7),
+                            child: TextFormField(
+                              cursorColor: Colors.white,
+                              initialValue: userEmailFetched,
+                              // controller: userNameController,
+                              style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              textAlign: TextAlign.center,
+                              keyboardType: TextInputType.emailAddress,
+                              onChanged: (value) {
+                                newUserEmail = value;
+                              },
+                              decoration: kMsgInputContainerDecoration.copyWith(
+                                  border: null,
+                                  enabledBorder: null,
+                                  focusedBorder: null,
+                                  fillColor: Colors.white12,
+                                  prefixIcon: const Icon(
+                                    Icons.edit,
+                                    color: Colors.white,
+                                    size: 30,
+                                  ),
+                                  suffixIcon: IconButton(
+                                      onPressed: () async {
+                                        if (newUserEmail.isEmpty) {
+                                          newUserEmail = userEmailFetched;
+                                        }
+                                        userEmailFetched = newUserEmail;
+                                        await AuthService.changeUserEmail(
+                                            context, userEmailFetched);
+                                      },
+                                      icon: const Icon(
+                                        Icons.check,
+                                        color: Colors.white,
+                                        size: 30,
+                                      ))),
+                            ),
+                          ),
+                        ]
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
-            HelperFunctions.tradeMark(),
-          ],
-        ),
+          ),
+          HelperFunctions.tradeMark(),
+        ],
+      ),
     );
   }
 }
@@ -281,23 +321,25 @@ class _ThemeTileState extends State<ThemeTile> {
     super.initState();
     setUpTile();
   }
-  setUpTile()async{
-    final userTheme  = await LocalDataService.getUserTheme();
-    if(userTheme != null && userTheme == widget.tileColorHexCode){
+
+  setUpTile() async {
+    final userTheme = await LocalDataService.getUserTheme();
+    if (userTheme != null && userTheme == widget.tileColorHexCode) {
       setState(() {
         isSelected = true;
       });
       SettingsScreen.isAThemeTileActive = true;
     }
   }
-  onTap(){
+
+  onTap() {
     if (!isSelected && !SettingsScreen.isAThemeTileActive) {
       SettingsScreen.isAThemeTileActive = true;
       SettingsScreen.selectedThemeColor = widget.tileColorHexCode;
       setState(() {
         isSelected = true;
       });
-    }else if(isSelected && SettingsScreen.isAThemeTileActive) {
+    } else if (isSelected && SettingsScreen.isAThemeTileActive) {
       SettingsScreen.isAThemeTileActive = false;
       SettingsScreen.selectedThemeColor = "";
       setState(() {
@@ -305,13 +347,14 @@ class _ThemeTileState extends State<ThemeTile> {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: DropShadow(
         blurRadius: 1,
-        offset: const Offset(1,1),
+        offset: const Offset(1, 1),
         opacity: 1,
         spread: 1,
         child: Container(
@@ -323,7 +366,13 @@ class _ThemeTileState extends State<ThemeTile> {
               border:
                   isSelected ? Border.all(color: Colors.blue, width: 3) : null),
           child: Center(
-            child: isSelected? Icon(Icons.check,color: Colors.black.withAlpha(87),size: 30,):null,
+            child: isSelected
+                ? Icon(
+                    Icons.check,
+                    color: Colors.black.withAlpha(87),
+                    size: 30,
+                  )
+                : null,
           ),
         ),
       ),

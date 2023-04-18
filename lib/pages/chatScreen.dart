@@ -60,7 +60,7 @@ class _chatScreenState extends State<chatScreen> {
         ? data
         : ModalRoute.of(context)?.settings.arguments as Map;
     grpId = data['groupId'];
-    if(userDetails["userName"] == data["createdBy"]){
+    if (userDetails["userName"] == data["createdBy"]) {
       chatScreen.isAdmin = true;
     }
     return _isLoading
@@ -70,8 +70,8 @@ class _chatScreenState extends State<chatScreen> {
               color: MainScreenTheme.mainScreenBg,
             ))
         : ModalProgressHUD(
-      inAsyncCall: showLoader,
-          child: Scaffold(
+            inAsyncCall: showLoader,
+            child: Scaffold(
               backgroundColor: MainScreenTheme.mainScreenBg,
               appBar: AppBar(
                 title: Text(
@@ -84,7 +84,13 @@ class _chatScreenState extends State<chatScreen> {
                   IconButton(
                     tooltip: "Group info",
                     onPressed: () {
-                      Navigator.pushNamed(context, GroupInfoScreen.id,arguments:{"groupId":data["groupId"],"groupImgPath":data["groupImgPath"],"groupName":data["groupName"],"isAdmin":chatScreen.isAdmin} );
+                      Navigator.pushNamed(context, GroupInfoScreen.id,
+                          arguments: {
+                            "groupId": data["groupId"],
+                            "groupImgPath": data["groupImgPath"],
+                            "groupName": data["groupName"],
+                            "isAdmin": chatScreen.isAdmin
+                          });
                     },
                     icon: const Icon(
                       Icons.info_outline,
@@ -103,14 +109,14 @@ class _chatScreenState extends State<chatScreen> {
                   ),
                   Center(
                     child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 15,vertical: 7),
-                        child: buildTextField(context)
-                    ),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 7),
+                        child: buildTextField(context)),
                   )
                 ],
               ),
             ),
-        );
+          );
   }
 
   //TextField chat screen
@@ -124,13 +130,15 @@ class _chatScreenState extends State<chatScreen> {
       ),
       cursorColor: Colors.white,
       decoration: kMsgInputContainerDecoration.copyWith(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           suffixIcon: IconButton(
               onPressed: () {
                 if (msgTxt.isNotEmpty) {
                   final dateTime = DateTime.now();
                   String sentTime = DateFormat('h:mm a').format(dateTime);
-                  String sentDay = DateFormat('EEEE, d MMM, yyyy').format(dateTime);
+                  String sentDay =
+                      DateFormat('EEEE, d MMM, yyyy').format(dateTime);
                   final sortTime = Timestamp.now();
                   msgTextController.clear();
                   _fireStore
@@ -174,7 +182,7 @@ class MessageStream extends StatefulWidget {
 
 class _MessageStreamState extends State<MessageStream> {
   static ScrollController controller = ScrollController();
-  static void scrollDown(){
+  static void scrollDown() {
     //animate scroll
     controller.animateTo(
       controller.position.maxScrollExtent,
@@ -184,6 +192,7 @@ class _MessageStreamState extends State<MessageStream> {
     //no animate scroll
     // controller.jumpTo(controller.position.maxScrollExtent);
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -191,6 +200,7 @@ class _MessageStreamState extends State<MessageStream> {
     // scrollDown();
     MessageStream.groupDate = "";
   }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -203,7 +213,7 @@ class _MessageStreamState extends State<MessageStream> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final messages = snapshot.data?.docs;
-            if(messages!.isNotEmpty){
+            if (messages!.isNotEmpty) {
               List<MessageBubble> messageWidgets = [];
               for (var message in messages) {
                 final msgSenderUid = message.get('senderUid');
@@ -212,7 +222,7 @@ class _MessageStreamState extends State<MessageStream> {
                 final msgTime = message.get('sentTime');
                 final msgDay = message.get("sentDay");
                 bool show = false;
-                if(MessageStream.groupDate != msgDay){
+                if (MessageStream.groupDate != msgDay) {
                   MessageStream.groupDate = msgDay;
                   show = true;
                 }
@@ -224,8 +234,7 @@ class _MessageStreamState extends State<MessageStream> {
                     time: msgTime,
                     msgId: message.id,
                     day: msgDay,
-                    show:show
-                ));
+                    show: show));
               }
               return Expanded(
                 child: ScrollConfiguration(
@@ -241,15 +250,26 @@ class _MessageStreamState extends State<MessageStream> {
                   ),
                 ),
               );
-            }else{
+            } else {
               return Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children:  [
-                    const Icon(Ionicons.server_outline,size:90,color: Colors.white12,),
-                    const SizedBox(height: 10,),
-                    Text("Wow so empty..\nStart texting",style: GoogleFonts.poppins(color: Colors.white12,fontSize: 18),textAlign: TextAlign.center,),
+                  children: [
+                    const Icon(
+                      Ionicons.server_outline,
+                      size: 90,
+                      color: Colors.white12,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Wow so empty..\nStart texting",
+                      style: GoogleFonts.poppins(
+                          color: Colors.white12, fontSize: 18),
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
               );
@@ -267,7 +287,6 @@ class _MessageStreamState extends State<MessageStream> {
   }
 }
 
-
 class MessageBubble extends StatefulWidget {
   const MessageBubble(
       {Key? key,
@@ -276,8 +295,9 @@ class MessageBubble extends StatefulWidget {
       required this.text,
       required this.isMe,
       required this.time,
-      required this.msgId, required this.day, required this.show
-      })
+      required this.msgId,
+      required this.day,
+      required this.show})
       : super(key: key);
   final String senderUid;
   final String senderUserName;
@@ -293,7 +313,7 @@ class MessageBubble extends StatefulWidget {
 
 class _MessageBubbleState extends State<MessageBubble> {
   bool isSelected = false;
-  deleteMsg(){
+  deleteMsg() {
     _fireStore
         .collection("groups")
         .doc(grpId)
@@ -301,6 +321,7 @@ class _MessageBubbleState extends State<MessageBubble> {
         .doc(widget.msgId)
         .delete();
   }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -320,16 +341,24 @@ class _MessageBubbleState extends State<MessageBubble> {
       },
       child: Column(
         children: [
-          if(widget.show)
+          if (widget.show)
             Column(
-            children: [
-              const SizedBox(height: 20,),
-              Center(
-                child: Text("${widget.day.split(',')[0]}\n${widget.day.split(',')[1]}${widget.day.split(',')[2]}",style: GoogleFonts.poppins(color: Colors.white),textAlign: TextAlign.center,),
-              ),
-              const SizedBox(height: 10,),
-            ],
-          ),
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: Text(
+                    "${widget.day.split(',')[0]}\n${widget.day.split(',')[1]}${widget.day.split(',')[2]}",
+                    style: GoogleFonts.poppins(color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
@@ -343,7 +372,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                   Column(
                     children: [
                       TextButton(
-                          onPressed:deleteMsg,
+                          onPressed: deleteMsg,
                           child: const Icon(
                             Icons.delete,
                             size: 35,
@@ -355,10 +384,14 @@ class _MessageBubbleState extends State<MessageBubble> {
                     ],
                   )
                 ],
-                if(!widget.isMe)
-                const SizedBox(width: 7,),
+                if (!widget.isMe)
+                  const SizedBox(
+                    width: 7,
+                  ),
                 Column(
-                  crossAxisAlignment: widget.isMe ?  CrossAxisAlignment.end:CrossAxisAlignment.start,
+                  crossAxisAlignment: widget.isMe
+                      ? CrossAxisAlignment.end
+                      : CrossAxisAlignment.start,
                   children: [
                     Material(
                         borderRadius: widget.isMe
@@ -370,12 +403,15 @@ class _MessageBubbleState extends State<MessageBubble> {
                                 topRight: Radius.circular(10),
                                 bottomLeft: Radius.circular(10),
                                 bottomRight: Radius.circular(10)),
-                        color: MainScreenTheme.mainScreenBg == Colors.black ? HexColor("222222"):Colors.black26,
+                        color: MainScreenTheme.mainScreenBg == Colors.black
+                            ? HexColor("222222")
+                            : Colors.black26,
                         child: Container(
                           constraints: BoxConstraints(
-                              minWidth:MediaQuery.of(context).size.width * 0.20,
-                              maxWidth: MediaQuery.of(context).size.width * 0.75
-                          ),
+                              minWidth:
+                                  MediaQuery.of(context).size.width * 0.20,
+                              maxWidth:
+                                  MediaQuery.of(context).size.width * 0.75),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 15.0, horizontal: 15.0),
@@ -397,7 +433,8 @@ class _MessageBubbleState extends State<MessageBubble> {
                                         style: GoogleFonts.poppins(
                                             color: Colors.blue,
                                             fontSize: 17,
-                                            decoration: TextDecoration.underline),
+                                            decoration:
+                                                TextDecoration.underline),
                                       )),
                                   const SizedBox(
                                     height: 5,
@@ -411,32 +448,38 @@ class _MessageBubbleState extends State<MessageBubble> {
                               ],
                             ),
                           ),
-                        )
-                    ),
+                        )),
                     const SizedBox(
                       height: 10,
                     ),
                     Row(
                       children: [
-                        if(!widget.isMe)
-                        const SizedBox(width: 5,),
+                        if (!widget.isMe)
+                          const SizedBox(
+                            width: 5,
+                          ),
                         Text(
                           widget.time,
-                          style: const TextStyle(color: Colors.white, fontSize: 13),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 13),
                         ),
-                        if(widget.isMe)
-                          const SizedBox(width: 15,)
+                        if (widget.isMe)
+                          const SizedBox(
+                            width: 15,
+                          )
                       ],
                     ),
                   ],
                 ),
-                if(widget.isMe)
-                  const SizedBox(width: 17,),
+                if (widget.isMe)
+                  const SizedBox(
+                    width: 17,
+                  ),
                 if (chatScreen.isAdmin && isSelected && !widget.isMe) ...[
                   Column(
                     children: [
                       TextButton(
-                          onPressed:deleteMsg,
+                          onPressed: deleteMsg,
                           child: const Icon(
                             Icons.delete,
                             size: 35,

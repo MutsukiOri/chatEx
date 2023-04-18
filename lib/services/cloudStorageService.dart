@@ -15,16 +15,19 @@ class CloudStorageService {
     });
     return url;
   }
-  static Future removeCloudStorageFile(String filePath)async{
+
+  static Future removeCloudStorageFile(String filePath) async {
     await FirebaseStorage.instance.ref().child(filePath).delete();
   }
-  static Future updateGroupProfilePic(String groupId ,dynamic imagePath) async {
+
+  static Future updateGroupProfilePic(String groupId, dynamic imagePath) async {
     final _auth = FirebaseAuth.instance;
     Reference ref = FirebaseStorage.instance
         .ref()
         .child("groupProfilePictures/$groupId}.jpg");
     await ref.putFile(File(imagePath));
   }
+
   static Future updateUserProfilePic(dynamic imagePath) async {
     final _auth = FirebaseAuth.instance;
     Reference ref = FirebaseStorage.instance
@@ -32,9 +35,11 @@ class CloudStorageService {
         .child("userProfilePictures/${_auth.currentUser?.uid}.jpg");
     await ref.putFile(File(imagePath));
   }
-  static Future<String> downloadLocalImg(String imgName,String filePath,String cloudStorageDir)async{
+
+  static Future<String> downloadLocalImg(
+      String imgName, String filePath, String cloudStorageDir) async {
     late String result;
-    try{
+    try {
       final storageRef = FirebaseStorage.instance.ref();
       Reference imgRef = storageRef.child("$cloudStorageDir/$imgName");
       final file = File(filePath);
@@ -53,24 +58,30 @@ class CloudStorageService {
           result = "error";
           break;
       }
-    } catch(e){
+    } catch (e) {
       print(e);
       result = "error";
     }
     return result;
   }
-  static Future<String> reDownloadUserProfilePicture()async{
+
+  static Future<String> reDownloadUserProfilePicture() async {
     final _auth = FirebaseAuth.instance;
     final _fireStore = FirebaseFirestore.instance;
     String userName = "";
-    await _fireStore.collection("users").doc(_auth.currentUser!.uid).get().then((value){
+    await _fireStore
+        .collection("users")
+        .doc(_auth.currentUser!.uid)
+        .get()
+        .then((value) {
       userName = value["userName"];
     });
     final appDocDir = await getExternalStorageDirectory();
     String imgName = "${_auth.currentUser!.uid}_${userName}.jpg";
     String filePath = "${appDocDir?.path}/userData/$imgName";
     String cloudImgName = "${_auth.currentUser!.uid}.jpg";
-    await CloudStorageService.downloadLocalImg(cloudImgName,filePath,"userProfilePictures");
+    await CloudStorageService.downloadLocalImg(
+        cloudImgName, filePath, "userProfilePictures");
     return filePath;
   }
 }
